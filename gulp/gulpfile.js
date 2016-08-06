@@ -22,3 +22,5 @@ gulp.task('sass', function() {
         .pipe(gulp.dest("../css"))
         .pipe(browserSync.stream());
 });
+
+gulp.task('default', ['watch']);
