@@ -1,13 +1,15 @@
-### Gulp & Design ###
-node_modules
-design
-*.psd
-
 ### Bower ###
 bower_components
 .bower-cache
 .bower-registry
 .bower-tmp
+
+### Code ###
+# Visual Studio Code - https://code.visualstudio.com/
+.settings/
+.vscode/
+tsconfig.json
+jsconfig.json
 
 ### OSX ###
 *.DS_Store
