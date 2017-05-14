@@ -10,7 +10,7 @@ var gulp           = require('gulp'),
     pump           = require('pump'),
     sourcemaps     = require('gulp-sourcemaps'),
     mainBowerFiles = require('main-bower-files'),
-    autoprefixer   = require('gulp-autoprefixer');
+    autoprefixer    = require('gulp-autoprefixer');
 
 // Convert SCSS to min.CSS & Reload browser
 gulp.task('sass', function() {
@@ -51,23 +51,14 @@ gulp.task('bowcss', function(){
 
 //Extract main JS files from Bower Packages
 gulp.task('bowjs', function(){
-  return gulp.src(mainBowerFiles('**/*.js', {
-    overrides: {
-      d3: {
-        main:'**/*.min.js'
-      },
-      tabletop: {
-        main:'**/*.min.js'
-      }
-    }
-  }))
+  return gulp.src(mainBowerFiles('**/*.js'))
   .pipe(gulp.dest('app/js'));
 });
 
 //Minify JS
 gulp.task('jsmin', function(cb) {
     pump([
-      gulp.src('js/main.js'),
+      gulp.src('js/*.js'),
       sourcemaps.init(),
       uglify({mangle: false}),
       concat('main.min.js'),
