@@ -9,4 +9,3 @@
 
 А ещё *imagemin* и *svgmin*. И *main-bower-files* для *bower*.
 Gitignore составлен c учётом MacOS, VS Code и Sublime Text.
-
