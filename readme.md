@@ -1,12 +1,10 @@
 
-## Очередная стартовая сборка проекта
+## Очередная стартовая сборка
 
-Стандартный *gulp*-набор:
+Стандартный *gulp*-механизм:
 - browser-sync
 - sass
 - uglify
-- sourcemaps
 
-А ещё *imagemin* и *svgmin*. И *main-bower-files* для *bower*.
-
-Gitignore составлен c учётом MacOS, VS Code и Sublime Text.
+А ещё *imagemin*, *svgmin* и *main-bower-files*. *Bower* установится локально (запускать через *npm run bower*) <br>
+_.Gitignore_ составлен c учётом MacOS, VS Code и Sublime Text.
