@@ -3,6 +3,7 @@ var gulp           = require('gulp'),
     sass           = require('gulp-sass'),
     cssmin         = require('gulp-clean-css'),
     rename         = require('gulp-rename'),
+    bulkSass       = require('gulp-sass-bulk-import'),
     svgmin         = require('gulp-svgmin'),
     imgmin         = require('gulp-imagemin'),
     uglify         = require('gulp-uglify'),
@@ -16,7 +17,11 @@ var gulp           = require('gulp'),
 gulp.task('sass', function() {
   return gulp.src('scss/style.scss')
     .pipe(sourcemaps.init())
-    .pipe(sass({outputStyle:'compressed'}).on('error', sass.logError))
+    .pipe(bulkSass())
+    .pipe(sass({
+      includePaths:['scss/blocks'],
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
     .pipe(autoprefixer({
       browsers: ['last 3 versions'],
       cascade: false
@@ -25,6 +30,20 @@ gulp.task('sass', function() {
     .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('app/css'))
     .pipe(browserSync.stream());
+});
+
+//Minify JS
+gulp.task('jsmin', function(cb) {
+    pump([
+      gulp.src('js/*.js'),
+      sourcemaps.init(),
+      uglify({mangle: false}),
+      concat('main.min.js'),
+      sourcemaps.write('maps'),
+      gulp.dest('app/js')
+    ],
+    cb
+  );
 });
 
 //Minify SVG
@@ -51,22 +70,8 @@ gulp.task('bowcss', function(){
 
 //Extract main JS files from Bower Packages
 gulp.task('bowjs', function(){
-  return gulp.src(mainBowerFiles('**/*.js'))
+  return gulp.src(mainBowerFiles('**/*.js',{overrides: {jquery: {main:'**/jquery.min.js'}}}))
   .pipe(gulp.dest('app/js'));
-});
-
-//Minify JS
-gulp.task('jsmin', function(cb) {
-    pump([
-      gulp.src('js/*.js'),
-      sourcemaps.init(),
-      uglify({mangle: false}),
-      concat('main.min.js'),
-      sourcemaps.write('maps'),
-      gulp.dest('app/js')
-    ],
-    cb
-  );
 });
 
 // Watch
@@ -75,7 +80,7 @@ gulp.task('watch', function() {
     server: 'app',
     notify: false
   });
-  gulp.watch(['scss/*.scss', 'scss/*/*.scss'], ['sass']);
+  gulp.watch(['scss/*.scss', 'scss/**/*.scss'], ['sass']);
   gulp.watch(['js/*.js'], ['jsmin']);
   gulp.watch('app/img/*').on('change', browserSync.reload);
   gulp.watch('app/**/*.+(css|html|js|csv)').on('change', browserSync.reload);

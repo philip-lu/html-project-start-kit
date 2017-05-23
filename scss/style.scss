@@ -1,5 +1,5 @@
 
-@import "variables";
-@import "mixins";
-@import "global";
-@import "main";
+@import 'global/variables.scss';
+@import 'global/mixins.scss';
+@import 'global/global.scss';
+@import 'blocks/*';
