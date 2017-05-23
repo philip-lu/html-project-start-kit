@@ -4,11 +4,13 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bower": "bower"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bower": "^1.8.0",
     "browser-sync": "^2.18.8",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -17,6 +19,7 @@
     "gulp-imagemin": "^3.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
+    "gulp-sass-bulk-import": "^1.0.1",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-svgmin": "^1.2.3",
     "gulp-uglify": "^2.1.2",
