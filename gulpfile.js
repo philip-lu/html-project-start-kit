@@ -9,14 +9,12 @@ var gulp           = require('gulp'),
     uglify         = require('gulp-uglify'),
     concat         = require('gulp-concat'),
     pump           = require('pump'),
-    sourcemaps     = require('gulp-sourcemaps'),
     mainBowerFiles = require('main-bower-files'),
     autoprefixer    = require('gulp-autoprefixer');
 
 // Convert SCSS to min.CSS & Reload browser
 gulp.task('sass', function() {
   return gulp.src('scss/style.scss')
-    .pipe(sourcemaps.init())
     .pipe(bulkSass())
     .pipe(sass({
       includePaths:['scss/blocks'],
@@ -27,7 +25,6 @@ gulp.task('sass', function() {
       cascade: false
     }))
     .pipe(rename({suffix: '.min'}))
-    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('app/css'))
     .pipe(browserSync.stream());
 });
@@ -36,10 +33,8 @@ gulp.task('sass', function() {
 gulp.task('jsmin', function(cb) {
     pump([
       gulp.src('js/*.js'),
-      sourcemaps.init(),
       uglify({mangle: false}),
       concat('main.min.js'),
-      sourcemaps.write('maps'),
       gulp.dest('app/js')
     ],
     cb
