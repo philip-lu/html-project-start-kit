@@ -49,11 +49,15 @@ gulp.task('svgmin', function () {
 });
 
 //Minify Images
-gulp.task('imgmin', () =>
-  gulp.src('img/*')
+gulp.task('imgmin', function () {
+  gulp.src(['img/*.+(png|gif|jpg|jpeg)', '!img/icn-*.*', '!img/bg-*.*'])
     .pipe(imgmin())
-    .pipe(gulp.dest('app/img'))
-);
+    .pipe(gulp.dest('app/img')),
+  gulp.src('img/bg-*.*')
+    .pipe(imgmin())
+    .pipe(gulp.dest('app/img/bg'))
+});
+
 
 //Extract main CSS files from Bower Packages
 gulp.task('bowcss', function(){
