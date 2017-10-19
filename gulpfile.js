@@ -2,15 +2,16 @@ var gulp           = require('gulp'),
     browserSync    = require('browser-sync').create(),
     sass           = require('gulp-sass'),
     cssmin         = require('gulp-clean-css'),
+    stripCss       = require('gulp-strip-css-comments'), // clear CSS from comments
     rename         = require('gulp-rename'),
-    bulkSass       = require('gulp-sass-bulk-import'),
+    bulkSass       = require('gulp-sass-bulk-import'),  // import all scss files in Blocks folder
     svgmin         = require('gulp-svgmin'),
     imgmin         = require('gulp-imagemin'),
     uglify         = require('gulp-uglify'),
     concat         = require('gulp-concat'),
     pump           = require('pump'),
-    mainBowerFiles = require('main-bower-files'),
-    autoprefixer    = require('gulp-autoprefixer');
+    autoprefixer    = require('gulp-autoprefixer'),
+    clear          = require('gulp-cache');
 
 // Convert SCSS to min.CSS & Reload browser
 gulp.task('sass', function() {
@@ -27,6 +28,15 @@ gulp.task('sass', function() {
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('app/css'))
     .pipe(browserSync.stream());
+});
+
+//Minify external CSS files in APP folder
+gulp.task('cssmini', function () {
+  return gulp.src(['app/css/*.css', '!app/css/style.min.css'])
+    .pipe(stripCss({preserve: true}))
+    .pipe(cssmin())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest('app/css'));
 });
 
 //Minify JS
@@ -58,21 +68,6 @@ gulp.task('imgmin', function () {
     .pipe(gulp.dest('app/img/bg'))
 });
 
-
-//Extract main CSS files from Bower Packages
-gulp.task('bowcss', function(){
-  return gulp.src(mainBowerFiles('**/*.css'))
-  .pipe(cssmin())
-  .pipe(rename({suffix: '.min'}))
-  .pipe(gulp.dest('app/css'));
-});
-
-//Extract main JS files from Bower Packages
-gulp.task('bowjs', function(){
-  return gulp.src(mainBowerFiles('**/*.js',{overrides: {jquery: {main:'**/jquery.min.js'}}}))
-  .pipe(gulp.dest('app/js'));
-});
-
 // Watch
 gulp.task('watch', function() {
   browserSync.init({
@@ -83,6 +78,11 @@ gulp.task('watch', function() {
   gulp.watch(['js/*.js'], ['jsmin']);
   gulp.watch('app/img/*').on('change', browserSync.reload);
   gulp.watch('app/**/*.+(css|html|js|csv)').on('change', browserSync.reload);
+});
+
+// Clear cache
+gulp.task('clear', function () {
+  return clear.clearAll();
 });
 
 // Run 'gulp'
